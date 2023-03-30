@@ -12,13 +12,17 @@ const CarColorPicker = ({ colors }) => {
                 <Image 
                     src={`/vehicles/crosstrek/colors/crosstrek-${activeColor.slug}.webp`}
                     alt={`Crosstrek ${activeColor.color}`}
-                    width={360}
-                    height={200}
+                    width={575}
+                    height={300}
                 />
             </div>
-            <Swatches colors={colors} /> 
+            <Swatches 
+                colors={colors} 
+                clickHandler={SetActiveColor}
+                activeColor={activeColor}
+            /> 
                 
-            <h3>Color name</h3>
+            <h3>{activeColor.name}</h3>
         </div>
 }
 export default CarColorPicker;
