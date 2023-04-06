@@ -1,5 +1,6 @@
 //import Swatch from "./Swatch";
 import { useState } from 'react';
+import Heading from './Heading';
 import Image from 'next/image';
 import Swatches from "./Swatches"
 
@@ -7,7 +8,9 @@ const CarColorPicker = ({ colors }) => {
     const [activeColor, SetActiveColor] = useState(colors[0]);
 
     return <div>
-            <h2>Color Picker</h2>
+            <Heading level={2}>
+                Color Picker
+            </Heading>
             <div>
                 <Image 
                     src={`/vehicles/crosstrek/colors/crosstrek-${activeColor.slug}.webp`}
