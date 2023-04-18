@@ -1,52 +1,48 @@
-import Image from "next/image";
-import Link from "next/link";
-import Layout from "../../components/Layout";
+import Image from 'next/image'
 
-import { getAllCarSlugs, getSingleVehicleBySlug} from '../../lib/api'
+import { getAllVehicleSlugs, getVehicleDataBySlug } from '../../lib/api'
 
 export async function getStaticPaths() {
-    const slugs = getAllCarSlugs();
-    const paths = slugs.map(slug => {
+    const vehicles = await getAllVehicleSlugs();
+    console.log({ vehicles });
+    const paths = vehicles.map((vehicle) => {
         return {
             params: {
-                id: slug,
+                id: vehicle.node.slug
             }
         }
     })
-    return {
-        paths,
-        fallback: false,
-    };
-}
-export async function getStaticProps({params}) {
-    // Get external data from the file system, API, DB, etc.
-    const slug = params.id;
-    const data = getSingleVehicleBySlug(slug);
 
-    // The value of the `props` key will be
-    //  passed to the `Home` component
     return {
+        paths: paths,
+        fallback: false, // can also be true or 'blocking'
+    }
+}
+
+// `getStaticPaths` requires using `getStaticProps`
+export async function getStaticProps({ params }) {
+    const { id } = params;
+    console.log({ id });
+    const vehicleData = await getVehicleDataBySlug(id);
+    return {
+        // Passed to the page component as props
         props: {
-            data
-        }
-  }
+            vehicleData
+        },
+    }
 }
 
-const SingleCarTemplate = ({data}) => {
-    const  {model, slug} = data;
-    return <Layout>
-        <h4>
-            <Link href="/vehicles">
-                &laquo; Back to Vehicles page
-            </Link>
-        </h4>
-        <h1>{model}</h1>
-        <Image
-            src={`/vehicles/${slug}/medium.webp`}
-            alt={`${model} car`}
-            width={350}
-            height={185}
-        />
-    </Layout>
+export default function SingleVehiclePage({ vehicleData }) {
+    const { title, featuredImage } = vehicleData;
+    return <div>
+        <h1>{title}</h1>
+        {featuredImage &&
+            <Image
+                src={featuredImage.node.sourceUrl}
+                alt={featuredImage.node.altText}
+                width={featuredImage.node.mediaDetails.width}
+                height={featuredImage.node.mediaDetails.height}
+            />
+        }
+    </div>
 }
-export default SingleCarTemplate;
