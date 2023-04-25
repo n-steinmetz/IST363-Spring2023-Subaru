@@ -12,10 +12,10 @@ const TrimPicker = ({ trimLevels }) => {
                 <Heading level={3}> {name} </Heading>
                 {thumbnail &&
                     <Image
-                        src={thumbnail.sourceURL}
+                        src={thumbnail.sourceUrl}
                         alt={thumbnail.altText}
                         width={thumbnail.mediaDetails.width}
-                        heigth={thumbnail.mediaDetails.height}
+                        height={thumbnail.mediaDetails.height}
                     />
                 }
             </li>
