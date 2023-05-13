@@ -1,7 +1,13 @@
-import Image from 'next/image'
-import TrimPicker from '../../components/TrimPicker'
+//import Image from 'next/image';
+import CallToAction from '../../components/CallToAction';
+import ColorPicker from '../../components/ColorPicker';
+import Container from '../../components/Container';
+import Layout from '../../components/Layout';
+import Showcase from '../../components/Showcase';
+import TrimPicker from '../../components/TrimPicker';
 
-import { getAllVehicleSlugs, getVehicleDataBySlug } from '../../lib/api'
+import { getAllVehicleSlugs, getVehicleDataBySlug } from '../../lib/api';
+
 
 export async function getStaticPaths() {
     const vehicles = await getAllVehicleSlugs();
@@ -35,18 +41,19 @@ export async function getStaticProps({ params }) {
 
 export default function SingleVehiclePage({ vehicleData }) {
     const { title, featuredImage, vehicleInformation } = vehicleData;
-    const { trimLevels } = vehicleInformation;
+    const { showcase, trimLevels, vehicleColors } = vehicleInformation;
+
     console.log({trimLevels});
-    return <div>
-        <h1>{title}</h1>
-        {featuredImage &&
-            <Image
-                src={featuredImage.node.sourceUrl}
-                alt={featuredImage.node.altText}
-                width={featuredImage.node.mediaDetails.width}
-                height={featuredImage.node.mediaDetails.height}
-            />
-        }
-        <TrimPicker trimLevels={trimLevels} />
-    </div>
+    return <Layout>
+        <Showcase 
+            subheadline={`Subaru ${title}`}
+            headline= {showcase.headline ? showcase.headline : null}
+            backgroundImage={featuredImage ? featuredImage.node : null}
+        />
+        <Container>
+            <TrimPicker trimLevels={trimLevels} />
+            <ColorPicker vehicleColors={vehicleColors}/>
+        </Container>
+        <CallToAction vehicleName={title}/>
+    </Layout>
 }
